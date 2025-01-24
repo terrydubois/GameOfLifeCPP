@@ -1,3 +1,11 @@
+// ========================================================================
+// Filename: GameOfLife.cpp
+// Author: Terry DuBois
+// Date: 2025-01-24
+// Description: Game of Life program in C++ using vectors to create a grid of 0's and 1's.
+//				Can be run manually or automatically.
+// ========================================================================
+
 #include <iostream>
 #include <vector>
 #include <chrono>
@@ -5,7 +13,7 @@
 
 using namespace std;
 
-// create grid with same width and height
+// create grid of all zeroes with same width and height
 vector<vector<int>> createGrid(int size) {
 	vector<vector<int>> grid(size, vector<int>(size, 0));
 	return grid;
@@ -14,11 +22,11 @@ vector<vector<int>> createGrid(int size) {
 // create grid with glider pattern
 vector<vector<int>> createGliderGrid() {
 
-	// create a 25x25 cell grid
+	// create a 25x25 grid with all dead cells
 	int size = 25;
 	vector<vector<int>> grid = createGrid(size);
 
-	// set values in the center, according to glider pattern
+	// set living cells in the center, according to glider pattern
 	int center = size / 2;
 	grid[center - 1][center] = 1;
 	grid[center][center + 1] = 1;
