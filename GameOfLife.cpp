@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <chrono>
+#include <thread>
 
 using namespace std;
 
@@ -82,24 +84,72 @@ void nextGen(vector<vector<int>> &grid) {
 	grid = gridNext;
 }
 
+// program entry point
 int main() {
-    
-    // create grid
+
+	// create grid
 	vector<vector<int>> grid = createGliderGrid();
 
-    // print initial generation
-    cout << "gen 0\n";
-    printGrid(grid);
+	// variables for console interface
+	string gameState = "menu"; // "menu", "auto", or "manual"
+	int gen = 0;
+	string title = "Game of Life, generation ";
 
-    // update generation and print
-    nextGen(grid);
-    cout << "gen 1\n";
-    printGrid(grid);
+	// initial prompt
+	cout << "Welcome to the Game of Life! Type one of the following commands to start:\n"
+		<< "'auto': auto-play the game\n"
+		<< "'manual': manually play the game\n"
+		<< "'exit': exit the game\n";
 
-    // update generation and print
-    nextGen(grid);
-    cout << "gen 2\n";
-    printGrid(grid);
+	while (true) {
 
-    return 0;
+		// await user input for menu or manual play
+		if (gameState == "menu" || gameState == "manual") {
+			string input;
+			getline(cin, input);
+
+			// exit game using 'exit' command
+			if (input == "exit" || input == "e") {
+				cout << "Goodbye!\n";
+				break;
+			}
+			// menu options
+			else if (gameState == "menu") {
+				if (input == "auto" || input == "manual") {
+					gameState = input;
+				}
+				else {
+					cout << "Command not recognized. Try 'auto', 'manual', or 'exit'.\n";
+				}
+			}
+		}
+
+		// if we are actually playing the game...
+		if (gameState == "auto" || gameState == "manual") {
+
+			// calculate next gen and print it to the console
+			gen++;
+			cout << title << gen << endl;
+			nextGen(grid);
+			printGrid(grid);
+
+            // end game after 50 generations
+			if (gen >= 50) {
+				cout << "Game of Life ended after 50 generations.\n";
+				break;
+			}
+
+			// prompt user to manually activate next gen
+			if (gameState == "manual") {
+				cout << "Press Enter to see the next generation. Type 'exit' to exit the game.\n";
+			}
+
+			// autoplay by sleeping thread for some time
+			if (gameState == "auto") {
+				this_thread::sleep_for(chrono::milliseconds(200));
+			}
+		}
+	}
+	
+	return 0;
 }
