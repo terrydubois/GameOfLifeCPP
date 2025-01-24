@@ -53,11 +53,52 @@ int countNeighbors(const vector<vector<int>> &grid, int row, int col) {
 	return neighbors;
 }
 
+// update entire grid to next generation of Game of Life
+void nextGen(vector<vector<int>> &grid) {
+
+	// create a new grid that will overwrite the original
+	int size = grid.size();
+	vector<vector<int>> gridNext = createGrid(size);
+
+	// use the cells of the original grid to compute the new grid
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+
+			// count living neighbors for current cell
+			int neighbors = countNeighbors(grid, i, j);
+			
+			// check if living cell should continue or die
+			if (grid[i][j] == 1) {
+				gridNext[i][j] = neighbors < 2 || neighbors > 3 ? 0 : 1;
+			}
+			// check if dead cell should become alive
+			else if (neighbors == 3) {
+				gridNext[i][j] = 1;
+			}
+		}
+	}
+
+	// new grid overwrites the original grid
+	grid = gridNext;
+}
+
 int main() {
     
     // create grid
 	vector<vector<int>> grid = createGliderGrid();
 
+    // print initial generation
+    cout << "gen 0\n";
+    printGrid(grid);
+
+    // update generation and print
+    nextGen(grid);
+    cout << "gen 1\n";
+    printGrid(grid);
+
+    // update generation and print
+    nextGen(grid);
+    cout << "gen 2\n";
     printGrid(grid);
 
     return 0;
