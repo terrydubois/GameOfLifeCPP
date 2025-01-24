@@ -36,6 +36,23 @@ void printGrid(const vector<vector<int>> &grid) {
 	}
 }
 
+// count number of living neighbors around a given cell
+int countNeighbors(const vector<vector<int>> &grid, int row, int col) {
+	int size = grid.size();
+	int neighbors = 0;
+	for (int i = row - 1; i <= row + 1; i++) {
+		for (int j = col - 1; j <= col + 1; j++) {
+			
+			// only look for neighbors that are in the bounds of the grid
+			// and also make sure to not count the given cell as a neighbor
+			if (i >= 0 && i < size && j >= 0 && j < size && (i != row || j != col)) {
+				neighbors += grid[i][j];
+			}
+		}
+	}
+	return neighbors;
+}
+
 int main() {
     
     // create grid
